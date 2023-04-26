@@ -23,7 +23,6 @@ type Props = {
 };
 const SearchTable = ({ data }: Props) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [showActive, setShowActive] = useState(false);
 
   const [sortColumn, setSortColumn] = useState("");
   const [sortDirection, setSortDirection] = useState("asc");
@@ -38,6 +37,7 @@ const SearchTable = ({ data }: Props) => {
 
   const handleFilterSelect = (selectedFilter: SetStateAction<string>) => {
     setFilter(selectedFilter);
+    setCurrentPage(1); // Reset to page 1 when changing filter
   };
 
   const handleItemsPerPageChange = (event: any) => {
@@ -47,9 +47,9 @@ const SearchTable = ({ data }: Props) => {
   const filteredData = data
     .filter(
       (item: Data) =>
-        item.comercio.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        item.cuit.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        (filter === "Ambos" ? true : item.activo === (filter === "Activos"))
+        item.comercio.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (item.cuit.includes(searchTerm.toLowerCase()) &&
+          (filter === "Ambos" ? true : item.activo === (filter === "Activos")))
     )
     .sort((a: any, b: any) => {
       if (sortColumn) {
@@ -93,6 +93,13 @@ const SearchTable = ({ data }: Props) => {
   }
 
   const columnns: Columns[] = [
+    {
+      name: "id",
+      label: "ID",
+      sortable: false,
+      sortDirection: sortDirection,
+      handleSort: handleSort,
+    },
     {
       name: "comercio",
       label: "Comercio",

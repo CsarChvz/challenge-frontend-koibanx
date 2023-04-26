@@ -19,7 +19,7 @@ const HeaderTable: React.FC<Props> = ({
   sortColumn,
 }: Props) => {
   return (
-    <thead>
+    <thead className=" text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 p-4">
       <tr>
         {columns.map((column: Columns) => (
           <th

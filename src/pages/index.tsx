@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 import React, { useEffect } from "react";
 import SearchTable from "@/components/Table/SearchTable";
-const data = require("../data/MOCK_DATA.json");
+import { data } from "../data/MOCK_DATA";
 
 const HomePage = () => {
   useEffect(() => {
@@ -43,7 +43,7 @@ const HomePage = () => {
             <path
               fillRule="evenodd"
               d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-              clip-rule="evenodd"
+              clipRule="evenodd"
             ></path>
           </svg>
         </div>
@@ -57,21 +57,7 @@ const HomePage = () => {
 
       {/* Table */}
       <div className="flex flex-col mt-4">
-        <SearchTable
-          data={[
-            {
-              name: "John Doe",
-              email: "john@mail.com",
-            },
-            {
-              name: "Alan Body",
-              email: "alanb@gmailcom",
-            },
-            {
-              name: "Zoe Doe",
-            },
-          ]}
-        />
+        <SearchTable data={data} />
       </div>
     </div>
   );

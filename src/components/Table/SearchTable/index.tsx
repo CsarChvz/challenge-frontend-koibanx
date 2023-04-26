@@ -2,16 +2,39 @@
 import { useState } from "react";
 import HeaderTable from "../HeaderTable";
 
+interface Data {
+  id: number;
+  comercio: string;
+  balance_actual: number;
+  concepto_1: number;
+  concepto_2: number;
+  concepto_3: number;
+  concepto_4: number;
+  concepto_5: number;
+  concepto_6: number;
+  cuit: string;
+  ultima_venta: Date;
+}
+
 const SearchTable = ({ data }: any) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showActive, setShowActive] = useState(false);
   const [sortColumn, setSortColumn] = useState("");
   const [sortDirection, setSortDirection] = useState("asc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPageOptions, setItemsPerPageOptions] = useState([
+    5, 10, 25, 50,
+  ]);
 
+  const handleItemsPerPageChange = (event: any) => {
+    setItemsPerPage(parseInt(event.target.value));
+    setCurrentPage(1); // Reset to page 1 when changing items per page
+  };
   const filteredData = data
     .filter(
       (item: any) =>
-        item.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        item.comercio.toLowerCase().includes(searchTerm.toLowerCase()) &&
         (showActive ? item.active : true)
     )
     .sort((a: any, b: any) => {
@@ -27,6 +50,17 @@ const SearchTable = ({ data }: any) => {
       }
       return 0;
     });
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  const paginatedData = filteredData.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+  const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
 
   const handleSort = (column: any) => {
     if (sortColumn === column) {
@@ -76,7 +110,7 @@ const SearchTable = ({ data }: any) => {
           sortColumn={sortColumn}
         />
         <tbody className="bg-white divide-y divide-gray-200">
-          {filteredData.map((item: any) => (
+          {paginatedData.map((item: any) => (
             <tr key={item.id}>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="flex items-center">
@@ -89,20 +123,53 @@ const SearchTable = ({ data }: any) => {
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <span
-                  className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                    item.active
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
-                  }`}
-                >
-                  {item.active ? "Activo" : "Inactivo"}
-                </span>
+                <div className="flex items-center">
+                  <div className="ml-4">
+                    <div className="text-sm font-medium text-gray-900">
+                      {item.email}
+                    </div>
+                  </div>
+                </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <div className="flex items-center justify-center mt-6">
+        <div className="mr-4">
+          <label htmlFor="itemsPerPage">Filas por página:</label>
+          <select
+            name="itemsPerPage"
+            id="itemsPerPage"
+            value={itemsPerPage}
+            className="ml-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+            onChange={handleItemsPerPageChange}
+          >
+            {itemsPerPageOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button
+          className="px-4 py-2 mx-1 bg-gray-200 text-gray-700 rounded"
+          onClick={() => goToPage(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Anterior
+        </button>
+        <span className="mx-2">
+          Página {currentPage} de {totalPages}
+        </span>
+        <button
+          className="px-4 py-2 mx-1 bg-gray-200 text-gray-700 rounded"
+          onClick={() => goToPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          Siguiente
+        </button>
+      </div>
     </div>
     // ...
   );

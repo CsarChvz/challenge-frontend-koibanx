@@ -47,6 +47,7 @@ const SearchTable = ({ data }: Props) => {
   const filteredData = data
     .filter(
       (item: Data) =>
+        item.id.toString().includes(searchTerm.toLowerCase()) ||
         item.comercio.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (item.cuit.includes(searchTerm.toLowerCase()) &&
           (filter === "Ambos" ? true : item.activo === (filter === "Activos")))

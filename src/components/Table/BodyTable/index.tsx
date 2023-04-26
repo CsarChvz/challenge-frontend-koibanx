@@ -28,6 +28,9 @@ const BodyTable: React.FC<Props> = ({ data }: Props) => {
           className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
         >
           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white-900">
+            {item.id}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white-900">
             {item.comercio}
           </td>
           <td className="px-6 py-4 whitespace-nowrap text-sm text-white-500">

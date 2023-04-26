@@ -45,12 +45,22 @@ const SearchTable = ({ data }: Props) => {
     setCurrentPage(1); // Reset to page 1 when changing items per page
   };
   const filteredData = data
-    .filter(
-      (item: Data) =>
-        item.comercio.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        item.cuit.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        (filter === "Ambos" ? true : item.activo === (filter === "Activos"))
-    )
+    .filter((item: Data) => {
+      // Filtrar por estatus
+      if (
+        (filter === "Activos" && !item.activo) ||
+        (filter === "Inactivos" && item.activo)
+      ) {
+        return false;
+      }
+
+      // Filtrar por término de búsqueda
+      return (
+        item.comercio.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.cuit.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.id.toString().includes(searchTerm.toLowerCase())
+      );
+    })
     .sort((a: any, b: any) => {
       if (sortColumn) {
         const valueA = a[sortColumn];

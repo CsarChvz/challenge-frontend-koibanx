@@ -1,6 +1,7 @@
 // components/SearchTable.js
 import { useState } from "react";
 import HeaderTable from "../HeaderTable";
+import BodyTable from "../BodyTable";
 
 interface Data {
   id: number;
@@ -13,10 +14,14 @@ interface Data {
   concepto_5: number;
   concepto_6: number;
   cuit: string;
-  ultima_venta: Date;
+  activo: boolean;
+  ultima_venta: string;
 }
 
-const SearchTable = ({ data }: any) => {
+type Props = {
+  data: Data[];
+};
+const SearchTable = ({ data }: Props) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showActive, setShowActive] = useState(false);
   const [sortColumn, setSortColumn] = useState("");
@@ -72,6 +77,7 @@ const SearchTable = ({ data }: any) => {
   };
   interface Columns {
     name: string;
+    label: string;
     sortable: boolean;
     sortDirection: string;
     handleSort: (column: string) => void;
@@ -79,14 +85,79 @@ const SearchTable = ({ data }: any) => {
 
   const columnns: Columns[] = [
     {
-      name: "name",
+      name: "comercio",
+      label: "Comercio",
       sortable: true,
       sortDirection: sortDirection,
       handleSort: handleSort,
     },
     {
-      name: "email",
+      name: "cuit",
+      label: "CUIT",
       sortable: true,
+      sortDirection: sortDirection,
+      handleSort: handleSort,
+    },
+    {
+      name: "concepto_1",
+      label: "Concepto 1",
+      sortable: false,
+      sortDirection: sortDirection,
+      handleSort: handleSort,
+    },
+    {
+      name: "concepto_2",
+      label: "Concepto 2",
+      sortable: false,
+      sortDirection: sortDirection,
+      handleSort: handleSort,
+    },
+    {
+      name: "concepto_3",
+      label: "Concepto 3",
+      sortable: false,
+      sortDirection: sortDirection,
+      handleSort: handleSort,
+    },
+    {
+      name: "concepto_4",
+      label: "Concepto 4",
+      sortable: false,
+      sortDirection: sortDirection,
+      handleSort: handleSort,
+    },
+    {
+      name: "concepto_5",
+      label: "Concepto 5",
+      sortable: false,
+      sortDirection: sortDirection,
+      handleSort: handleSort,
+    },
+    {
+      name: "concepto_6",
+      label: "Concepto 6",
+      sortable: false,
+      sortDirection: sortDirection,
+      handleSort: handleSort,
+    },
+    {
+      name: "balance_actual",
+      label: "Balance actual",
+      sortable: false,
+      sortDirection: sortDirection,
+      handleSort: handleSort,
+    },
+    {
+      name: "activo",
+      label: "Estatus",
+      sortable: false,
+      sortDirection: sortDirection,
+      handleSort: handleSort,
+    },
+    {
+      name: "ultima_venta",
+      label: "Última venta",
+      sortable: false,
       sortDirection: sortDirection,
       handleSort: handleSort,
     },
@@ -99,7 +170,7 @@ const SearchTable = ({ data }: any) => {
         <input
           type="text"
           placeholder="Buscar..."
-          className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500 rounded"
+          className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           onChange={(event) => setSearchTerm(event.target.value)}
         />
       </div>
@@ -109,31 +180,7 @@ const SearchTable = ({ data }: any) => {
           sortDirection={sortDirection}
           sortColumn={sortColumn}
         />
-        <tbody className="bg-white divide-y divide-gray-200">
-          {paginatedData.map((item: any) => (
-            <tr key={item.id}>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div className="flex items-center">
-                  <div className="ml-4">
-                    <div className="text-sm font-medium text-gray-900">
-                      {item.name}
-                    </div>
-                    <div className="text-sm text-gray-500">{item.email}</div>
-                  </div>
-                </div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div className="flex items-center">
-                  <div className="ml-4">
-                    <div className="text-sm font-medium text-gray-900">
-                      {item.email}
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+        <BodyTable data={paginatedData} />
       </table>
       <div className="flex items-center justify-center mt-6">
         <div className="mr-4">

@@ -1,32 +1,63 @@
 import React from "react";
 
+interface Data {
+  id: number;
+  comercio: string;
+  balance_actual: number;
+  concepto_1: number;
+  concepto_2: number;
+  concepto_3: number;
+  concepto_4: number;
+  concepto_5: number;
+  concepto_6: number;
+  cuit: string;
+  activo: boolean;
+  ultima_venta: string;
+}
+
 type Props = {
-  data?: any;
+  data: Data[];
 };
 
 const BodyTable: React.FC<Props> = ({ data }: Props) => {
   return (
     <tbody className="bg-white divide-y divide-gray-200">
-      {data.map((item: any) => (
+      {data.map((item: Data) => (
         <tr key={item.id}>
-          <td className="px-6 py-4 whitespace-nowrap">
-            <div className="flex items-center">
-              <div className="ml-4">
-                <div className="text-sm font-medium text-gray-900">
-                  {item.comercio}
-                </div>
-                <div className="text-sm text-gray-500">{item.email}</div>
-              </div>
-            </div>
+          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+            {item.comercio}
           </td>
-          <td className="px-6 py-4 whitespace-nowrap">
-            <div className="flex items-center">
-              <div className="ml-4">
-                <div className="text-sm font-medium text-gray-900">
-                  {item.email}
-                </div>
-              </div>
-            </div>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            {item.cuit}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            {item.balance_actual}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            {item.concepto_1}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            {item.concepto_2}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            {item.concepto_3}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            {item.concepto_4}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            {item.concepto_5}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            {item.concepto_6}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100">
+              {item.activo ? "Activo" : "Inactivo"}
+            </span>
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            {item.ultima_venta}
           </td>
         </tr>
       ))}

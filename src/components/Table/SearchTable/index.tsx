@@ -1,6 +1,9 @@
-import { SetStateAction, useState } from "react";
+import { ChangeEvent, SetStateAction, useState } from "react";
 import HeaderTable from "../HeaderTable";
 import BodyTable from "../BodyTable";
+import PaginationTable from "../PaginationTable";
+import SearchBar from "../SearchBar";
+import StatusFilter from "../StatusFilter";
 
 interface Data {
   id: number;
@@ -227,62 +230,20 @@ const SearchTable = ({ data }: Props) => {
   return (
     // ...
     <div className="pb-4">
-      {/* SearchBar */}
       <div className="flex mb-4">
-        <div className="relative inline-block text-left ml-4">
-          <button
-            className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {filter}
-            <svg
-              className="w-5 h-5 ml-2 -mr-1 text-gray-500"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10 12a2 2 0 110-4 2 2 0 010 4zm-7-2a7 7 0 1114 0 7 7 0 01-14 0z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
-          {isOpen && (
-            <div className="absolute left-0 w-56 mt-2 origin-top-left bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg">
-              <div className="py-1">
-                <button
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                  onClick={() => handleFilterSelect("Ambos")}
-                >
-                  Ambos
-                </button>
-                <button
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                  onClick={() => handleFilterSelect("Activos")}
-                >
-                  Activos
-                </button>
-                <button
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                  onClick={() => handleFilterSelect("Inactivos")}
-                >
-                  Inactivos
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+        <StatusFilter
+          filter={filter}
+          handleFilterSelect={handleFilterSelect}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+        />
         <div className="relative inline-block text-left ml-4">{/* ... */}</div>
+        {/* SearchBar */}
 
-        {/* Search input */}
-        <input
-          type="text"
-          placeholder="Buscar..."
-          className="flex-grow p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          onChange={(event) => {
-            setSearchTerm(event.target.value);
-            handleSearch(searchTerm);
-          }}
+        <SearchBar
+          handleSearch={handleSearch}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
         />
       </div>
 
@@ -297,41 +258,14 @@ const SearchTable = ({ data }: Props) => {
       </table>
 
       {/* Pagination and Rows por Page */}
-      <div className="flex items-center justify-center mt-6">
-        <div className="mr-4">
-          <label htmlFor="itemsPerPage">Filas por página:</label>
-          <select
-            name="itemsPerPage"
-            id="itemsPerPage"
-            value={itemsPerPage}
-            className="ml-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-black"
-            onChange={handleItemsPerPageChange}
-          >
-            {itemsPerPageOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button
-          className="px-4 py-2 mx-1 bg-gray-200 text-gray-700 rounded"
-          onClick={() => goToPage(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Anterior
-        </button>
-        <span className="mx-2">
-          Página {currentPage} de {totalPages}
-        </span>
-        <button
-          className="px-4 py-2 mx-1 bg-gray-200 text-gray-700 rounded"
-          onClick={() => goToPage(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          Siguiente
-        </button>
-      </div>
+      <PaginationTable
+        currentPage={currentPage}
+        itemsPerPage={itemsPerPage}
+        itemsPerPageOptions={itemsPerPageOptions}
+        totalPages={totalPages}
+        goToPage={goToPage}
+        handleItemsPerPageChange={handleItemsPerPageChange}
+      />
     </div>
     // ...
   );

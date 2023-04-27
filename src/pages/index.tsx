@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { Inter } from "next/font/google";
-const inter = Inter({ subsets: ["latin"] });
 import React, { useEffect } from "react";
 import SearchTable from "@/components/Table/SearchTable";
 import { data } from "../data/MOCK_DATA";

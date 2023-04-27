@@ -54,7 +54,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
   <figure>
     <div class="image-container">
-    <img src="https://avatars.githubusercontent.com/u/79390377?v=4" alt="CsarChvz" style="width: 100%; height: auto; border-radius: 50%; border: 1px white"/>
+    <img src="https://avatars.githubusercontent.com/u/79390377?v=4" alt="CsarChvz" style="width: 100%; height: auto; border-radius: 50%"/>
     
 </div>
     <figcaption>

@@ -1,4 +1,3 @@
-// components/SearchTable.js
 import { SetStateAction, useState } from "react";
 import HeaderTable from "../HeaderTable";
 import BodyTable from "../BodyTable";
@@ -21,9 +20,9 @@ interface Data {
 type Props = {
   data: Data[];
 };
+
 const SearchTable = ({ data }: Props) => {
   const [searchTerm, setSearchTerm] = useState("");
-
   const [sortColumn, setSortColumn] = useState("");
   const [sortDirection, setSortDirection] = useState("asc");
   const [currentPage, setCurrentPage] = useState(1);
@@ -44,6 +43,7 @@ const SearchTable = ({ data }: Props) => {
     setItemsPerPage(parseInt(event.target.value));
     setCurrentPage(1); // Reset to page 1 when changing items per page
   };
+
   const filteredData = data
     .filter((item: Data) => {
       // Filtrar por estatus
@@ -105,6 +105,37 @@ const SearchTable = ({ data }: Props) => {
     sortDirection: string;
     handleSort: (column: string) => void;
   }
+
+  const handleSearch = (searchString: string) => {
+    const searchWords = searchString.toLowerCase().split(" ");
+
+    const idOrCuitMatches: any[] = [];
+    const comercioMatches: any[] = [];
+
+    searchWords.forEach((word) => {
+      if (!isNaN(Number(word))) {
+        // Si es un número, buscar en id o cuit
+        idOrCuitMatches.push({ id: { $regex: word } });
+        idOrCuitMatches.push({ cuit: { $regex: word } });
+      } else {
+        // Si no es un número, buscar en comercio
+        comercioMatches.push({ comercio: { $regex: word } });
+      }
+    });
+
+    const query = {
+      $and: [
+        { $or: idOrCuitMatches.length > 0 ? idOrCuitMatches : [{}] },
+        { $and: comercioMatches.length > 0 ? comercioMatches : [{}] },
+      ],
+    };
+
+    const api = `https://api.koibanx.com/stores?q=${JSON.stringify(query)}`;
+    console.log("Querying: ", api);
+
+    // Obtener los datos y filtrarlos por searchTerm
+    // Realiza la solicitud a la API y procesa los datos según sea necesario
+  };
 
   const columnns: Columns[] = [
     {
@@ -196,6 +227,7 @@ const SearchTable = ({ data }: Props) => {
   return (
     // ...
     <div className="pb-4">
+      {/* SearchBar */}
       <div className="flex mb-4">
         <div className="relative inline-block text-left ml-4">
           <button
@@ -247,10 +279,14 @@ const SearchTable = ({ data }: Props) => {
           type="text"
           placeholder="Buscar..."
           className="flex-grow p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          onChange={(event) => setSearchTerm(event.target.value)}
+          onChange={(event) => {
+            setSearchTerm(event.target.value);
+            handleSearch(searchTerm);
+          }}
         />
       </div>
 
+      {/* Table */}
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <HeaderTable
           columns={columnns}
@@ -259,6 +295,8 @@ const SearchTable = ({ data }: Props) => {
         />
         <BodyTable data={paginatedData} />
       </table>
+
+      {/* Pagination and Rows por Page */}
       <div className="flex items-center justify-center mt-6">
         <div className="mr-4">
           <label htmlFor="itemsPerPage">Filas por página:</label>

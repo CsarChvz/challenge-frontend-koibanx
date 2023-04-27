@@ -54,11 +54,15 @@ const SearchTable = ({ data }: Props) => {
         return false;
       }
 
-      // Filtrar por término de búsqueda
-      return (
-        item.comercio.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.cuit.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.id.toString().includes(searchTerm.toLowerCase())
+      // Dividir el término de búsqueda en palabras
+      const searchWords = searchTerm.toLowerCase().split(" ");
+
+      // Verificar si todas las palabras coinciden en algún campo
+      return searchWords.every(
+        (word) =>
+          item.comercio.toLowerCase().includes(word) ||
+          item.cuit.toLowerCase().includes(word) ||
+          item.id.toString().includes(word)
       );
     })
     .sort((a: any, b: any) => {
